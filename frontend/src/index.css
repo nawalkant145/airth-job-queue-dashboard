@@ -28,19 +28,13 @@
   padding: 0;
 }
 
-html,
-body {
-  width: 100%;
-  max-width: 100%;
-  overflow-x: hidden;
-}
-
 body {
   font-family: var(--font-family);
   background-color: var(--bg-color);
   color: var(--text-main);
   line-height: 1.5;
-  padding: 24px;
+  padding: clamp(12px, 3vw, 24px);
+  width: 100%;
 }
 
 .dashboard-container {
@@ -50,23 +44,24 @@ body {
   min-width: 0;
 }
 
-/* Header */
+/* Header - Fluid Flex Layout */
 .dashboard-header {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
   gap: 16px;
   margin-bottom: 24px;
   flex-wrap: wrap;
+  width: 100%;
 }
 
 .header-title-container {
   min-width: 0;
-  flex: 1 1 300px;
+  flex: 1 1 280px;
 }
 
 .header-title {
-  font-size: 1.75rem;
+  font-size: clamp(1.35rem, 4vw, 1.75rem);
   font-weight: 700;
   color: var(--text-main);
   overflow-wrap: anywhere;
@@ -74,13 +69,13 @@ body {
 }
 
 .header-subtitle {
-  font-size: 0.9rem;
+  font-size: clamp(0.85rem, 2vw, 0.9rem);
   color: var(--text-muted);
   overflow-wrap: anywhere;
   word-break: break-word;
 }
 
-/* Alert Banner */
+/* Alert Banner - Fluid Text Wrapping */
 .alert-banner {
   display: flex;
   justify-content: space-between;
@@ -111,7 +106,7 @@ body {
   align-items: center;
   gap: 8px;
   min-width: 0;
-  flex: 1;
+  flex: 1 1 200px;
 }
 
 .alert-message {
@@ -133,10 +128,10 @@ body {
   flex-shrink: 0;
 }
 
-/* Metric Cards */
+/* Status Cards - Content-Driven Fluid CSS Grid */
 .status-counts-container {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 150px), 1fr));
   gap: 16px;
   margin-bottom: 24px;
   width: 100%;
@@ -175,10 +170,10 @@ body {
 .stat-completed .stat-value { color: var(--completed-color); }
 .stat-failed .stat-value { color: var(--failed-color); }
 
-/* Main Grid Layout */
+/* Main Section Layout - Intrinsic Content-Driven Grid Wrap */
 .dashboard-main {
   display: grid;
-  grid-template-columns: 320px 1fr;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 310px), 1fr));
   gap: 24px;
   width: 100%;
   min-width: 0;
@@ -188,7 +183,7 @@ body {
   background: var(--card-bg);
   border: 1px solid var(--border-color);
   border-radius: var(--radius);
-  padding: 20px;
+  padding: clamp(14px, 2.5vw, 20px);
   min-width: 0;
   width: 100%;
 }
@@ -207,7 +202,7 @@ body {
   font-weight: 600;
 }
 
-/* Form */
+/* Form - Fully Adaptive */
 .job-form {
   width: 100%;
 }
@@ -264,12 +259,13 @@ body {
   box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.15);
 }
 
-/* Filter */
+/* Filter - Responsive Alignment */
 .filter-group {
   display: flex;
   align-items: center;
   gap: 8px;
   flex-wrap: wrap;
+  min-width: 0;
 }
 
 .filter-label {
@@ -287,6 +283,7 @@ body {
   outline: none;
   cursor: pointer;
   max-width: 100%;
+  flex: 1 1 auto;
 }
 
 /* Buttons */
@@ -320,7 +317,7 @@ body {
   background-color: transparent;
   border: 1px solid var(--border-color);
   color: var(--text-main);
-  flex-shrink: 0;
+  flex: 0 1 auto;
 }
 
 .btn-outline:hover:not(:disabled) {
@@ -380,7 +377,7 @@ body {
   color: var(--failed-color);
 }
 
-/* Table */
+/* Table Containment */
 .table-wrapper {
   width: 100%;
   max-width: 100%;
@@ -390,7 +387,7 @@ body {
 
 .jobs-table {
   width: 100%;
-  min-width: 580px;
+  min-width: 540px;
   border-collapse: collapse;
   text-align: left;
 }
@@ -475,77 +472,4 @@ body {
   font-weight: 600;
   color: var(--text-main);
   margin-bottom: 4px;
-}
-
-/* -------------------------------------------------- */
-/* RESPONSIVE MEDIA QUERIES                           */
-/* -------------------------------------------------- */
-
-@media (max-width: 1024px) {
-  body {
-    padding: 20px;
-  }
-}
-
-@media (max-width: 900px) {
-  .dashboard-main {
-    grid-template-columns: 1fr;
-  }
-}
-
-@media (max-width: 768px) {
-  body {
-    padding: 16px;
-  }
-
-  .dashboard-header {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .btn-outline {
-    width: 100%;
-  }
-
-  .header-title {
-    font-size: 1.5rem;
-  }
-}
-
-@media (max-width: 520px) {
-  .status-counts-container {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .status-counts-container .stat-card:last-child {
-    grid-column: span 2;
-  }
-}
-
-@media (max-width: 480px) {
-  body {
-    padding: 12px;
-  }
-
-  .card-section {
-    padding: 14px;
-  }
-
-  .header-title {
-    font-size: 1.35rem;
-  }
-
-  .section-header {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .filter-group {
-    width: 100%;
-    justify-content: space-between;
-  }
-
-  .filter-select {
-    flex: 1;
-  }
 }
