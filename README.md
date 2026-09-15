@@ -8,7 +8,7 @@ Designed for the **AIRTH** Technical Hiring Assignment.
 
 ## 🚀 Live Links & Submission Details
 
-- **GitHub Repository**: [Public Repo Link](https://github.com/skant/airth-job-queue-dashboard)
+- **GitHub Repository**: [https://github.com/nawalkant145/airth-job-queue-dashboard](https://github.com/nawalkant145/airth-job-queue-dashboard)
 - **Live Frontend (Vercel)**: `https://airth-job-queue-dashboard.vercel.app` (Placeholder - Update upon deployment)
 - **Live Backend API (Render)**: `https://airth-job-queue-backend.onrender.com` (Placeholder - Update upon deployment)
 

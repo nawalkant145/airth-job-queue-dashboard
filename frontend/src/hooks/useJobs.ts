@@ -23,7 +23,6 @@ export function useJobs(): UseJobsReturn {
   const fetchJobs = useCallback(async () => {
     try {
       setLoading(true);
-      setError(null); // Clear previous errors on manual or automatic refetch
       const data = await api.getJobs();
       setJobs(data);
     } catch (err) {
