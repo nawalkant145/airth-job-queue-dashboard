@@ -41,6 +41,7 @@ Designed for the **AIRTH** Technical Hiring Assignment.
 6. **Client-Side Filtering & Metrics**: Real-time status filter dropdown and status metric counts calculated efficiently with `useMemo`.
 7. **Per-Row Loading States**: Action-specific feedback (`Running...`, `Completing...`, `Deleting...`) without freezing the entire dashboard.
 8. **Delete Jobs**: Remove jobs with clean `404 Not Found` handling for nonexistent IDs.
+9. **Client-Side Pagination**: Displays jobs in pages of 10 with responsive controls, continuous `S.No.` numbering across pages, auto-reset on filtering/creation, and page bounds adjustments on deletion.
 
 ---
 
@@ -76,7 +77,8 @@ airth-job-queue-dashboard/
     │   │   ├── StatusFilter.tsx
     │   │   ├── StatusCounts.tsx
     │   │   ├── JobList.tsx
-    │   │   └── JobRow.tsx
+    │   │   ├── JobRow.tsx
+    │   │   └── Pagination.tsx
     │   ├── hooks/
     │   │   └── useJobs.ts
     │   ├── api.ts
@@ -95,7 +97,7 @@ airth-job-queue-dashboard/
 ### 🧠 Critical Concurrency Questions & Answers
 
 #### 1. Where should the transition rule be enforced?
-**The backend database layer must enforce transition rules**, not the React frontend. Frontend button logic (hiding/disabling actions) is strictly a UX convenience. The backend and PostgreSQL database enforce state transition invariants so direct API requests cannot bypass business logic.
+**The backend must enforce transition rules using an atomic database operation.** Frontend button logic (hiding/disabling actions) is strictly a UX convenience. The backend and PostgreSQL database enforce state transition invariants so direct API requests cannot bypass business logic.
 
 #### 2. What happens if someone bypasses the React application and calls the API directly?
 If a client sends a `PATCH /jobs/:id/status` request via cURL, Postman, or a script:
@@ -126,12 +128,32 @@ Valid transitions:
 - `running → completed`
 - `running → failed`
 
-Invalid transitions (return `409 Conflict` or `400 Bad Request`):
+Invalid transitions return `409 Conflict`:
 - `completed → running`
 - `failed → running`
 - `pending → completed`
 - `pending → failed`
 - Direct creation of non-`pending` status via `POST /jobs`
+
+---
+
+## 🛡️ Validation & Error Handling
+
+### Backend DTO Validation
+Configured globally in NestJS `main.ts` via `ValidationPipe({ whitelist: true, forbidNonWhitelisted: true, transform: true })`:
+- **CreateJobDto**:
+  - `title`: `@IsString()`, `@IsNotEmpty()`, `@MaxLength(120)`
+  - `type`: `@IsString()`, `@IsNotEmpty()`, `@MaxLength(120)`
+  - *Note*: Clients cannot create jobs with non-`pending` statuses directly.
+- **UpdateJobStatusDto**:
+  - `status`: `@IsEnum(JobStatus)` (`pending`, `running`, `completed`, `failed`)
+- **ParseUUIDPipe**: Enforces valid UUID format on `/jobs/:id` route parameters. Malformed UUIDs automatically return `400 Bad Request`.
+
+### Standardized Error Responses
+All API errors return consistent JSON objects containing `statusCode` and `message`:
+- **`400 Bad Request`**: Validation failure or invalid UUID syntax.
+- **`404 Not Found`**: Target job ID does not exist.
+- **`409 Conflict`**: Invalid status transition attempt or concurrent modification race condition.
 
 ---
 

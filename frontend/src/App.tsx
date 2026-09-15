@@ -75,7 +75,7 @@ export function App() {
         <div>
           <h1 className="header-title">⚡ Mini Job Queue Dashboard</h1>
           <p className="header-subtitle">
-            Real-time queue tracking with database-level atomic concurrency control
+            Reliable job queue tracking with database-level atomic concurrency control
           </p>
         </div>
         <button className="btn btn-outline" onClick={() => refetch()} disabled={loading}>
