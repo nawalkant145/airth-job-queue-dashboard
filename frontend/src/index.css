@@ -20,10 +20,19 @@
   --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
 }
 
-* {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+}
+
+html,
+body {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
 }
 
 body {
@@ -35,8 +44,10 @@ body {
 }
 
 .dashboard-container {
+  width: 100%;
   max-width: 1200px;
   margin: 0 auto;
+  min-width: 0;
 }
 
 /* Header */
@@ -44,18 +55,29 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 16px;
   margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.header-title-container {
+  min-width: 0;
+  flex: 1 1 300px;
 }
 
 .header-title {
   font-size: 1.75rem;
   font-weight: 700;
   color: var(--text-main);
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 .header-subtitle {
   font-size: 0.9rem;
   color: var(--text-muted);
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 /* Alert Banner */
@@ -63,10 +85,13 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 12px;
   padding: 12px 16px;
   border-radius: var(--radius);
   margin-bottom: 20px;
   font-size: 0.95rem;
+  flex-wrap: wrap;
+  width: 100%;
 }
 
 .alert-conflict {
@@ -85,10 +110,18 @@ body {
   display: flex;
   align-items: center;
   gap: 8px;
+  min-width: 0;
+  flex: 1;
+}
+
+.alert-message {
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 .alert-icon {
   font-weight: 700;
+  flex-shrink: 0;
 }
 
 .alert-close {
@@ -97,14 +130,16 @@ body {
   font-size: 1.25rem;
   cursor: pointer;
   color: inherit;
+  flex-shrink: 0;
 }
 
 /* Metric Cards */
 .status-counts-container {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
   gap: 16px;
   margin-bottom: 24px;
+  width: 100%;
 }
 
 .stat-card {
@@ -114,6 +149,7 @@ body {
   border: 1px solid var(--border-color);
   display: flex;
   flex-direction: column;
+  min-width: 0;
 }
 
 .stat-label {
@@ -122,6 +158,9 @@ body {
   text-transform: uppercase;
   letter-spacing: 0.5px;
   color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .stat-value {
@@ -141,12 +180,8 @@ body {
   display: grid;
   grid-template-columns: 320px 1fr;
   gap: 24px;
-}
-
-@media (max-width: 900px) {
-  .dashboard-main {
-    grid-template-columns: 1fr;
-  }
+  width: 100%;
+  min-width: 0;
 }
 
 .card-section {
@@ -154,13 +189,17 @@ body {
   border: 1px solid var(--border-color);
   border-radius: var(--radius);
   padding: 20px;
+  min-width: 0;
+  width: 100%;
 }
 
 .section-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 12px;
   margin-bottom: 16px;
+  flex-wrap: wrap;
 }
 
 .section-header h2 {
@@ -169,6 +208,10 @@ body {
 }
 
 /* Form */
+.job-form {
+  width: 100%;
+}
+
 .job-form .form-title {
   font-size: 1.1rem;
   font-weight: 600;
@@ -182,18 +225,22 @@ body {
   border-radius: var(--radius);
   font-size: 0.85rem;
   margin-bottom: 12px;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 .form-row {
   display: flex;
   flex-direction: column;
   gap: 16px;
+  width: 100%;
 }
 
 .form-group {
   display: flex;
   flex-direction: column;
   gap: 6px;
+  width: 100%;
 }
 
 .form-group label {
@@ -203,11 +250,13 @@ body {
 }
 
 .form-group input {
+  width: 100%;
   padding: 10px 12px;
   border: 1px solid var(--border-color);
   border-radius: var(--radius);
   font-size: 0.95rem;
   outline: none;
+  box-sizing: border-box;
 }
 
 .form-group input:focus {
@@ -220,6 +269,7 @@ body {
   display: flex;
   align-items: center;
   gap: 8px;
+  flex-wrap: wrap;
 }
 
 .filter-label {
@@ -236,6 +286,7 @@ body {
   font-size: 0.9rem;
   outline: none;
   cursor: pointer;
+  max-width: 100%;
 }
 
 /* Buttons */
@@ -247,6 +298,7 @@ body {
   cursor: pointer;
   border: none;
   transition: all 0.15s ease;
+  white-space: nowrap;
 }
 
 .btn:disabled {
@@ -257,6 +309,7 @@ body {
 .btn-primary {
   background-color: var(--primary-color);
   color: white;
+  width: 100%;
 }
 
 .btn-primary:hover:not(:disabled) {
@@ -267,6 +320,7 @@ body {
   background-color: transparent;
   border: 1px solid var(--border-color);
   color: var(--text-main);
+  flex-shrink: 0;
 }
 
 .btn-outline:hover:not(:disabled) {
@@ -275,6 +329,7 @@ body {
 
 .action-buttons {
   display: flex;
+  flex-wrap: wrap;
   gap: 6px;
 }
 
@@ -327,11 +382,15 @@ body {
 
 /* Table */
 .table-wrapper {
+  width: 100%;
+  max-width: 100%;
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .jobs-table {
   width: 100%;
+  min-width: 580px;
   border-collapse: collapse;
   text-align: left;
 }
@@ -343,12 +402,20 @@ body {
   text-transform: uppercase;
   color: var(--text-muted);
   border-bottom: 1px solid var(--border-color);
+  white-space: nowrap;
 }
 
 .jobs-table td {
   padding: 14px;
   border-bottom: 1px solid var(--border-color);
   font-size: 0.9rem;
+}
+
+.cell-title {
+  max-width: 220px;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+  white-space: normal;
 }
 
 .type-tag {
@@ -358,6 +425,8 @@ body {
   font-size: 0.8rem;
   color: var(--text-muted);
   font-family: monospace;
+  display: inline-block;
+  word-break: break-all;
 }
 
 /* Status Badges */
@@ -406,4 +475,77 @@ body {
   font-weight: 600;
   color: var(--text-main);
   margin-bottom: 4px;
+}
+
+/* -------------------------------------------------- */
+/* RESPONSIVE MEDIA QUERIES                           */
+/* -------------------------------------------------- */
+
+@media (max-width: 1024px) {
+  body {
+    padding: 20px;
+  }
+}
+
+@media (max-width: 900px) {
+  .dashboard-main {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  body {
+    padding: 16px;
+  }
+
+  .dashboard-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .btn-outline {
+    width: 100%;
+  }
+
+  .header-title {
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 520px) {
+  .status-counts-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .status-counts-container .stat-card:last-child {
+    grid-column: span 2;
+  }
+}
+
+@media (max-width: 480px) {
+  body {
+    padding: 12px;
+  }
+
+  .card-section {
+    padding: 14px;
+  }
+
+  .header-title {
+    font-size: 1.35rem;
+  }
+
+  .section-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .filter-group {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .filter-select {
+    flex: 1;
+  }
 }
