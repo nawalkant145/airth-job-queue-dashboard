@@ -170,10 +170,11 @@ body {
 .stat-completed .stat-value { color: var(--completed-color); }
 .stat-failed .stat-value { color: var(--failed-color); }
 
-/* Main Section Layout - Intrinsic Content-Driven Grid Wrap */
+/* Main Section Layout - Sidebar & Fluid Content Grid Wrap */
 .dashboard-main {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 310px), 1fr));
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
   gap: 24px;
   width: 100%;
   min-width: 0;
@@ -186,6 +187,20 @@ body {
   padding: clamp(14px, 2.5vw, 20px);
   min-width: 0;
   width: 100%;
+  height: auto;
+}
+
+.form-section {
+  flex: 1 1 300px;
+  max-width: 340px;
+  min-width: 0;
+  align-self: flex-start;
+  height: auto;
+}
+
+.list-section {
+  flex: 999 1 500px;
+  min-width: 0;
 }
 
 .section-header {
@@ -326,8 +341,9 @@ body {
 
 .action-buttons {
   display: flex;
-  flex-wrap: wrap;
+  align-items: center;
   gap: 6px;
+  flex-wrap: nowrap;
 }
 
 .btn-action {
@@ -382,19 +398,20 @@ body {
   width: 100%;
   max-width: 100%;
   overflow-x: auto;
+  min-width: 0;
   -webkit-overflow-scrolling: touch;
 }
 
 .jobs-table {
   width: 100%;
-  min-width: 540px;
   border-collapse: collapse;
   text-align: left;
+  table-layout: auto;
 }
 
 .jobs-table th {
   background-color: #f8fafc;
-  padding: 12px 14px;
+  padding: 10px 12px;
   font-size: 0.8rem;
   text-transform: uppercase;
   color: var(--text-muted);
@@ -402,28 +419,62 @@ body {
   white-space: nowrap;
 }
 
+.jobs-table th:first-child {
+  text-align: center;
+}
+
 .jobs-table td {
-  padding: 14px;
+  padding: 10px 12px;
   border-bottom: 1px solid var(--border-color);
-  font-size: 0.9rem;
+  font-size: 0.88rem;
+  vertical-align: middle;
+}
+
+.cell-sno {
+  white-space: nowrap;
+  width: 1%;
+  text-align: center;
+  font-weight: 600;
+  color: var(--text-muted);
 }
 
 .cell-title {
-  max-width: 220px;
   word-break: break-word;
   overflow-wrap: anywhere;
   white-space: normal;
+  min-width: 140px;
+}
+
+.cell-type {
+  white-space: nowrap;
+  width: 1%;
+}
+
+.cell-status {
+  white-space: nowrap;
+  width: 1%;
+}
+
+.cell-date {
+  white-space: nowrap;
+  font-size: 0.82rem;
+  width: 1%;
+}
+
+.cell-actions {
+  white-space: nowrap;
+  width: 1%;
 }
 
 .type-tag {
   background-color: #f1f5f9;
-  padding: 2px 8px;
+  padding: 3px 8px;
   border-radius: 4px;
-  font-size: 0.8rem;
+  font-size: 0.82rem;
   color: var(--text-muted);
   font-family: monospace;
   display: inline-block;
-  word-break: break-all;
+  white-space: nowrap;
 }
 
 /* Status Badges */
@@ -472,4 +523,86 @@ body {
   font-weight: 600;
   color: var(--text-main);
   margin-bottom: 4px;
+}
+
+/* Pagination */
+.pagination-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border-color);
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.pagination-summary {
+  font-size: 0.88rem;
+  color: var(--text-muted);
+}
+
+.pagination-summary strong {
+  color: var(--text-main);
+}
+
+.pagination-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.pagination-numbers {
+  display: flex;
+  gap: 4px;
+}
+
+.btn-page {
+  padding: 6px 12px;
+  font-size: 0.85rem;
+  background-color: var(--card-bg);
+  border: 1px solid var(--border-color);
+  color: var(--text-main);
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-page:hover:not(:disabled) {
+  background-color: #f1f5f9;
+  border-color: #cbd5e1;
+}
+
+.btn-page:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.btn-page-number {
+  padding: 6px 12px;
+  font-size: 0.85rem;
+  background-color: var(--card-bg);
+  border: 1px solid var(--border-color);
+  color: var(--text-main);
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  min-width: 34px;
+}
+
+.btn-page-number:hover {
+  background-color: #f1f5f9;
+}
+
+.btn-page-active {
+  background-color: var(--primary-color);
+  color: white;
+  border-color: var(--primary-color);
+  font-weight: 700;
+}
+
+.btn-page-active:hover {
+  background-color: var(--primary-hover);
 }

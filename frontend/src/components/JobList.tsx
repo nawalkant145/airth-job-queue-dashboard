@@ -6,6 +6,7 @@ interface JobListProps {
   jobs: Job[];
   loading: boolean;
   actionLoading: Record<string, string>;
+  startIndex?: number;
   onUpdateStatus: (id: string, status: JobStatus) => Promise<boolean>;
   onDeleteJob: (id: string) => Promise<boolean>;
 }
@@ -14,6 +15,7 @@ export const JobList: React.FC<JobListProps> = ({
   jobs,
   loading,
   actionLoading,
+  startIndex = 0,
   onUpdateStatus,
   onDeleteJob,
 }) => {
@@ -40,6 +42,7 @@ export const JobList: React.FC<JobListProps> = ({
       <table className="jobs-table">
         <thead>
           <tr>
+            <th>S.No.</th>
             <th>Job Title</th>
             <th>Type</th>
             <th>Status</th>
@@ -48,9 +51,10 @@ export const JobList: React.FC<JobListProps> = ({
           </tr>
         </thead>
         <tbody>
-          {jobs.map((job) => (
+          {jobs.map((job, index) => (
             <JobRow
               key={job.id}
+              serialNumber={startIndex + index + 1}
               job={job}
               actionLoading={actionLoading[job.id]}
               onUpdateStatus={onUpdateStatus}

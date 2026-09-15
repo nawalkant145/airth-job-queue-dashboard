@@ -2,6 +2,7 @@ import React from 'react';
 import { Job, JobStatus } from '../types';
 
 interface JobRowProps {
+  serialNumber: number;
   job: Job;
   actionLoading?: string;
   onUpdateStatus: (id: string, status: JobStatus) => Promise<boolean>;
@@ -9,6 +10,7 @@ interface JobRowProps {
 }
 
 export const JobRow: React.FC<JobRowProps> = ({
+  serialNumber,
   job,
   actionLoading,
   onUpdateStatus,
@@ -29,6 +31,7 @@ export const JobRow: React.FC<JobRowProps> = ({
 
   return (
     <tr className={`job-row status-${job.status}`}>
+      <td className="cell-sno">{serialNumber}</td>
       <td className="cell-title font-medium">{String(job.title || '')}</td>
       <td className="cell-type">
         <span className="type-tag">{String(job.type || '')}</span>

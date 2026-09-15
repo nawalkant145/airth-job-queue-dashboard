@@ -1,10 +1,13 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { useJobs } from './hooks/useJobs';
 import { StatusCounts } from './components/StatusCounts';
 import { JobForm } from './components/JobForm';
 import { StatusFilter } from './components/StatusFilter';
 import { JobList } from './components/JobList';
+import { Pagination } from './components/Pagination';
 import { JobStatus } from './types';
+
+const ITEMS_PER_PAGE = 10;
 
 export function App() {
   const {
@@ -20,12 +23,50 @@ export function App() {
   } = useJobs();
 
   const [selectedStatus, setSelectedStatus] = useState<JobStatus | 'all'>('all');
+  const [currentPage, setCurrentPage] = useState<number>(1);
 
-  // Client-side filtering as specified in assignment requirements
+  // Filter jobs by selected status
   const filteredJobs = useMemo(() => {
     if (selectedStatus === 'all') return jobs;
     return jobs.filter((job) => job.status === selectedStatus);
   }, [jobs, selectedStatus]);
+
+  // Calculate total pages for the filtered jobs
+  const totalPages = useMemo(() => {
+    return Math.ceil(filteredJobs.length / ITEMS_PER_PAGE) || 1;
+  }, [filteredJobs.length]);
+
+  // Automatically adjust current page if current page exceeds totalPages (e.g. after deletion)
+  useEffect(() => {
+    if (currentPage > totalPages) {
+      setCurrentPage(totalPages);
+    }
+  }, [currentPage, totalPages]);
+
+  // Handle status filter change - resets to page 1
+  const handleStatusFilterChange = (status: JobStatus | 'all') => {
+    setSelectedStatus(status);
+    setCurrentPage(1);
+  };
+
+  // Slice paginated jobs for the current page
+  const paginatedJobs = useMemo(() => {
+    const validPage = Math.min(Math.max(currentPage, 1), totalPages);
+    const start = (validPage - 1) * ITEMS_PER_PAGE;
+    return filteredJobs.slice(start, start + ITEMS_PER_PAGE);
+  }, [filteredJobs, currentPage, totalPages]);
+
+  // Start index for S.No. calculation across pages
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+
+  // Handle job creation - stay/reset to page 1 to show newest job
+  const handleCreateJob = async (input: Parameters<typeof createJob>[0]) => {
+    const success = await createJob(input);
+    if (success) {
+      setCurrentPage(1);
+    }
+    return success;
+  };
 
   return (
     <div className="dashboard-container">
@@ -64,25 +105,34 @@ export function App() {
       <div className="dashboard-main">
         {/* Left Column: Create Form */}
         <section className="card-section form-section">
-          <JobForm onCreateJob={createJob} />
+          <JobForm onCreateJob={handleCreateJob} />
         </section>
 
-        {/* Right Column: Job List Table with Filter */}
+        {/* Right Column: Job List Table with Filter & Pagination */}
         <section className="card-section list-section">
           <div className="section-header">
             <h2>Job Queue ({filteredJobs.length})</h2>
             <StatusFilter
               selectedStatus={selectedStatus}
-              onSelectStatus={setSelectedStatus}
+              onSelectStatus={handleStatusFilterChange}
             />
           </div>
 
           <JobList
-            jobs={filteredJobs}
+            jobs={paginatedJobs}
             loading={loading}
             actionLoading={actionLoading}
+            startIndex={startIndex}
             onUpdateStatus={updateStatus}
             onDeleteJob={deleteJob}
+          />
+
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            totalItems={filteredJobs.length}
+            itemsPerPage={ITEMS_PER_PAGE}
+            onPageChange={setCurrentPage}
           />
         </section>
       </div>
