@@ -137,6 +137,18 @@ Invalid transitions (return `409 Conflict` or `400 Bad Request`):
 
 ## 🛠️ API Documentation
 
+### `GET /`
+Root health check route.
+
+**Response (`200 OK`)**:
+```json
+{
+  "message": "AIRTH Job Queue API is running"
+}
+```
+
+---
+
 ### `POST /jobs`
 Creates a new job. Always initializes status to `pending`.
 

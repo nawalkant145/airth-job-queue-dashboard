@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { AppController } from './app.controller';
 import { Job } from './jobs/entities/job.entity';
 import { JobAuditLog } from './jobs/entities/job-audit-log.entity';
 import { JobsModule } from './jobs/jobs.module';
@@ -44,5 +45,6 @@ import { JobsModule } from './jobs/jobs.module';
     }),
     JobsModule,
   ],
+  controllers: [AppController],
 })
 export class AppModule {}
