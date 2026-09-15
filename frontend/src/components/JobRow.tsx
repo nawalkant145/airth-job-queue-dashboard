@@ -15,6 +15,7 @@ export const JobRow: React.FC<JobRowProps> = ({
   onDeleteJob,
 }) => {
   const isLoading = Boolean(actionLoading);
+  const loadingText = typeof actionLoading === 'string' ? actionLoading : '';
 
   const formatDate = (dateString: string) => {
     try {
@@ -22,25 +23,25 @@ export const JobRow: React.FC<JobRowProps> = ({
       return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }) +
         ' ' + d.toLocaleDateString();
     } catch {
-      return dateString;
+      return String(dateString || '');
     }
   };
 
   return (
     <tr className={`job-row status-${job.status}`}>
-      <td className="cell-title font-medium">{job.title}</td>
+      <td className="cell-title font-medium">{String(job.title || '')}</td>
       <td className="cell-type">
-        <span className="type-tag">{job.type}</span>
+        <span className="type-tag">{String(job.type || '')}</span>
       </td>
       <td className="cell-status">
         <span className={`status-badge badge-${job.status}`}>
-          {job.status.toUpperCase()}
+          {String(job.status || '').toUpperCase()}
         </span>
       </td>
       <td className="cell-date text-muted">{formatDate(job.createdAt)}</td>
       <td className="cell-actions">
         {isLoading ? (
-          <span className="loading-spinner-inline">{actionLoading}</span>
+          <span className="loading-spinner-inline">{loadingText}</span>
         ) : (
           <div className="action-buttons">
             {job.status === 'pending' && (
