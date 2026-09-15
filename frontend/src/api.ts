@@ -7,10 +7,12 @@ async function handleResponse<T>(response: Response): Promise<T> {
     let errorMessage = `HTTP Error ${response.status}`;
     try {
       const errorData = await response.json();
-      if (errorData && errorData.message) {
+      if (errorData && errorData.message !== undefined && errorData.message !== null) {
         errorMessage = Array.isArray(errorData.message)
           ? errorData.message.join(', ')
-          : errorData.message;
+          : typeof errorData.message === 'object'
+          ? JSON.stringify(errorData.message)
+          : String(errorData.message);
       }
     } catch {
       // Fall back to default status text if JSON parsing fails

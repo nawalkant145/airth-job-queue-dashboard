@@ -47,7 +47,9 @@ export function App() {
         <div className={`alert-banner ${error.status === 409 ? 'alert-conflict' : 'alert-error'}`}>
           <div className="alert-content">
             <span className="alert-icon">{error.status === 409 ? '⚠️ Concurrency Conflict (409):' : '❌ Error:'}</span>
-            <span className="alert-message">{error.message}</span>
+            <span className="alert-message">
+              {typeof error.message === 'string' ? error.message : JSON.stringify(error.message)}
+            </span>
           </div>
           <button className="alert-close" onClick={clearError}>
             &times;
